@@ -8,3 +8,11 @@
 .calc_display {
   font-size: x-large;
 }
+
+.btn-wide {
+  grid-column: span 2;
+}
+
+.btn-tall {
+  grid-column: span 2;
+}
