@@ -16,7 +16,7 @@ const Calculator = () => {
   // }
 
   useEffect(() => {
-    value.current = parseFloat(dispNum);
+    value.current = Number(dispNum);
   }, [dispNum]);
 
   const inputValue = (input) => {
@@ -37,7 +37,11 @@ const Calculator = () => {
   };
 
   const invertValue = () => {
-    setDispNum((value.current * -1).toString());
+    if (dispNum[0] !== "-"){
+      setDispNum("-" + dispNum);
+    } else {
+      setDispNum(dispNum.slice(1));
+    }
   }
 
   return (
