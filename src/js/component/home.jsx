@@ -1,61 +1,98 @@
 import React, { useState, useEffect } from "react";
 
 //include images into your bundle
-import { StrictMode } from "react/cjs/react.production.min.js";
 import { Cart, CartItem, CartToggle } from "./cart";
+import { Product } from "./product";
 
 //create your first component
 const Home = () => {
   /**
-   * Add add item functionality
-   * maybe clean up the incr/decr/remove functions?
-   * remove ability to have negative items in cart
    * maybe save cart to session storage?
+   * Fix cart to not assume all products have a sale price.
+   * Make product allow qty change if item in cart
    */
-
-  const [items, setItems] = useState([
+  const [products] = useState([
     {
-      image: "https://placekitten.com/350",
-      sku: "abc123",
-      title: "Cats are cool",
-      price: 123.00,
-      salePrice: 155.00,
-      qty: 5,
+      image: "https://c1.neweggimages.com/ProductImageCompressAll1280/14-131-808-01.jpg",
+      sku: "GPU001",
+      title: "AMD RX 7900 XTX (24GB GDR6)",
+      price: 899.99,
+      salePrice: 799.99,
     },
     {
-      image: "https://placekitten.com/250",
-      sku: "abc125",
-      title: "Some Other Thing",
-      price: 125.00,
-      salePrice: 175.00,
-      qty: 2,
+      image: "https://assets.biglots.com/is/image/biglots/810596373-2?$medium$",
+      sku: "PIL001",
+      title: "BigLots Rainbow Pillow",
+      price: 14.99,
+      salePrice: 9.95,
     },
-  ]);
+    {
+      image: "https://i.ebayimg.com/images/g/no4AAOSwpMJjr-v4/s-l1600.jpg",
+      sku: "VIN001",
+      title: "Coheed And Cambria Good Apollo I'm Burning Star IV | Volume One: From Fear Through The Eyes Of Madness - Mint Condition, Never Opened, Vinyl LP",
+      price: 350.00,
+      salePrice: null,
+    }
+  ])
 
-  const changeQty = (idx, diff) => {
-    let tempItems = [...items];
-    tempItems[idx].qty += diff;
-    setItems(tempItems);
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    for (let idx in cartItems) {
+      if (cartItems[idx].qty <= 0) {
+        setCartItems(cartItems.toSpliced(idx, 1));
+      }
+    }
+  }, [cartItems]);
+
+  const changeQtyFunc = (idx) => {
+    return (diff) => {
+      let tempItems = [...cartItems];
+      tempItems[idx].qty += diff;
+      setCartItems(tempItems);
+    }
+  }
+
+  const addToCartFunc = (sku) => {
+    return () => {
+      if (cartItems.map(i => item.sku).includes(sku)) {
+        return;
+      }
+
+      setCartItems([
+        ...cartItems,
+        { ...products.find((i) => i.sku === sku), qty: 1 }
+      ])
+    }
   }
 
   return (
-    <StrictMode>
+    <React.StrictMode>
       <div className="container">
         <CartToggle cartID="Cart">
-          Wobsite
+          <h1>Wobsite</h1>
         </CartToggle>
         <Cart cartID="Cart">
-          {items.map((item, idx) => (
+          {cartItems.map((item, idx) => (
             <CartItem
               lineItem={item}
               key={idx}
-              incr={() => changeQty(idx, 1)}
-              decr={() => changeQty(idx, -1)}
-              remove={() => setItems(items.toSpliced(idx, 1))}
+              changeQty={changeQtyFunc(idx)}
+              remove={() => setCartItems(cartItems.toSpliced(idx, 1))}
             />))}
         </Cart>
+        <section>
+          <div className="container d-flex flex-row flex-wrap justify-content-center gap-3">
+            {products.map((product, idx) => <Product
+              product={product}
+              addToCart={addToCartFunc(product.sku)}
+              isInCart={false}
+              key={idx}
+            />)}
+          </div>
+        </section>
       </div>
-    </StrictMode>
+    </React.StrictMode>
   );
 };
 

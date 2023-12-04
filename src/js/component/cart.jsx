@@ -36,7 +36,7 @@ const Cart = ({ children, cartID }) => {
   );
 };
 
-const CartItem = ({ lineItem, incr, decr, remove }) => {
+const CartItem = ({ lineItem, changeQty, remove }) => {
   return (
     <div className="list-group-item list-group-item-action">
       <img src={lineItem.image} className="cart_image" />
@@ -45,12 +45,12 @@ const CartItem = ({ lineItem, incr, decr, remove }) => {
       </div>
       <div>
         <strike>${lineItem.price.toFixed(2)}</strike> $
-        {lineItem.salePrice.toFixed(2)}
+        {lineItem.salePrice ? lineItem.salePrice.toFixed(2) : ""}
       </div>
       <div>
-        <button className="btn btn-secondary" onClick={incr}>▲</button>
+        <button className="btn btn-secondary" onClick={() => changeQty(1)}>▲</button>
         {lineItem.qty}x - ${(lineItem.salePrice * lineItem.qty).toFixed(2)}
-        <button className="btn btn-secondary" onClick={decr}>▼</button>
+        <button className="btn btn-secondary" onClick={() => changeQty(-1)}>▼</button>
         <button className="btn btn-danger" onClick={remove}>⊘</button>
       </div>
     </div>

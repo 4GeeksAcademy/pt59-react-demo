@@ -1,0 +1,16 @@
+.price {
+  font-weight: bolder;
+  font-size: larger;
+}
+
+.sale-price ~ .price {
+  text-decoration: line-through;
+  font-style: italic;
+  opacity: 0.75;
+  font-weight: lighter;
+}
+
+.sale-price {
+  font-weight: bolder;
+  font-size: larger;
+}
