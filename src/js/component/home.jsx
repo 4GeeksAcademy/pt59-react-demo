@@ -55,7 +55,7 @@ const Home = () => {
 
   const addToCartFunc = (sku) => {
     return () => {
-      if (cartItems.map(i => item.sku).includes(sku)) {
+      if (cartItems.map(i => i.sku).includes(sku)) {
         return;
       }
 
@@ -67,22 +67,24 @@ const Home = () => {
   }
 
   return (
-    <React.StrictMode>
-      <div className="container">
+    <>
+      <nav className="navbar bg-body-tertiary sticky-top mb-3">
         <CartToggle cartID="Cart">
           <h1>Wobsite</h1>
         </CartToggle>
+      </nav>
+      <div className="container">
         <Cart cartID="Cart">
-          {cartItems.map((item, idx) => (
+          {cartItems.length ? cartItems.map((item, idx) => (
             <CartItem
               lineItem={item}
               key={idx}
               changeQty={changeQtyFunc(idx)}
               remove={() => setCartItems(cartItems.toSpliced(idx, 1))}
-            />))}
+            />)) : <p className="balanced-text">There's nothing in your cart, why not add something?</p>}
         </Cart>
-        <section>
-          <div className="container d-flex flex-row flex-wrap justify-content-center gap-3">
+        <section className="container mb-5">
+          <div className="d-flex flex-row flex-wrap justify-content-center gap-3">
             {products.map((product, idx) => <Product
               product={product}
               addToCart={addToCartFunc(product.sku)}
@@ -92,7 +94,7 @@ const Home = () => {
           </div>
         </section>
       </div>
-    </React.StrictMode>
+    </>
   );
 };
 

@@ -1,4 +1,9 @@
 .cart_image {
-    width: 2rem;
-    height: auto;
+  width: 2rem;
+  height: auto;
+}
+
+.balanced-text {
+  text-align: center;
+  text-wrap: balance;
 }
