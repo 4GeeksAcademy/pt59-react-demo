@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const CartToggle = ({ cartID, children }) => {
   return (
@@ -39,17 +39,17 @@ const Cart = ({ children, cartID }) => {
 const CartItem = ({ lineItem, changeQty, remove }) => {
   return (
     <div className="list-group-item list-group-item-action">
-      <img src={lineItem.image} className="cart_image" />
-      <div>
-        {lineItem.sku} - {lineItem.title}
+      <div className="d-flex justify-content-around">
+        <img src={lineItem.image} className="cart_image" />
+        <span>{lineItem.sku} - {lineItem.title}</span>
       </div>
-      <div>
-        <strike>${lineItem.price.toFixed(2)}</strike> $
-        {lineItem.salePrice ? lineItem.salePrice.toFixed(2) : ""}
+      <div className="d-flex justify-content-around">
+        {lineItem.salePrice ? <span className="sale-price">${lineItem.salePrice.toFixed(2)}</span> : ""}
+        {lineItem.price ? <span className="price">${lineItem.price.toFixed(2)}</span> : ""}
       </div>
-      <div>
+      <div className="d-flex justify-content-around">
         <button className="btn btn-secondary" onClick={() => changeQty(1)}>▲</button>
-        {lineItem.qty}x - ${(lineItem.salePrice * lineItem.qty).toFixed(2)}
+        {lineItem.qty}x - ${((lineItem.salePrice || lineItem.price) * lineItem.qty).toFixed(2)}
         <button className="btn btn-secondary" onClick={() => changeQty(-1)}>▼</button>
         <button className="btn btn-danger" onClick={remove}>⊘</button>
       </div>

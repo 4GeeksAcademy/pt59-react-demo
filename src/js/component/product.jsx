@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/product.css";
 
 const Product = ({ product, addToCart }) => {
+  const [qty, setQty] = useState(1);
+
+  useEffect(() => {
+    if (qty < 1) {
+      setQty(1);
+    }
+  }, [qty])
+
   return <div className="card" style={{
     maxWidth: "25rem",
     width: "100%"
@@ -18,9 +26,11 @@ const Product = ({ product, addToCart }) => {
       <span className="price">
         ${product.price}
       </span>
-      <button className="btn btn-primary" onClick={addToCart}>
-        Add To Cart!
+      <button className="btn btn-secondary" onClick={() => setQty(qty + 1)}>▲</button>
+      <button className="btn btn-primary" onClick={() => addToCart(qty)}>
+        Add {qty} To Cart!
       </button>
+      <button className="btn btn-secondary" onClick={() => setQty(qty - 1)}>▼</button>
     </div>
   </div>
 }

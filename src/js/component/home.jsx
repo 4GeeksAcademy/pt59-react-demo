@@ -8,9 +8,8 @@ import { Product } from "./product";
 const Home = () => {
   /**
    * maybe save cart to session storage?
-   * Fix cart to not assume all products have a sale price.
-   * Make product allow qty change if item in cart
    */
+
   const [products] = useState([
     {
       image: "https://c1.neweggimages.com/ProductImageCompressAll1280/14-131-808-01.jpg",
@@ -54,14 +53,14 @@ const Home = () => {
   }
 
   const addToCartFunc = (sku) => {
-    return () => {
+    return (qty) => {
       if (cartItems.map(i => i.sku).includes(sku)) {
         return;
       }
 
       setCartItems([
         ...cartItems,
-        { ...products.find((i) => i.sku === sku), qty: 1 }
+        { ...products.find((i) => i.sku === sku), qty: qty }
       ])
     }
   }
@@ -82,6 +81,13 @@ const Home = () => {
               changeQty={changeQtyFunc(idx)}
               remove={() => setCartItems(cartItems.toSpliced(idx, 1))}
             />)) : <p className="balanced-text">There's nothing in your cart, why not add something?</p>}
+
+          <div className="list-group-item list-group-item-action">
+            <h5>Total: ${cartItems.reduce(
+              (acc, i) => acc + ((i.salePrice || i.price) * i.qty),
+              0
+            ).toFixed(2)}</h5>
+          </div>
         </Cart>
         <section className="container mb-5">
           <div className="d-flex flex-row flex-wrap justify-content-center gap-3">
