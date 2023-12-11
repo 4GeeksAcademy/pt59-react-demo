@@ -1,6 +1,7 @@
 import React from "react";
+import { ModalButton } from "./Modal";
 
-const Card = ({ children, img, title, buttonText, buttonLink }) => {
+const Card = ({ children, img, title, onClick }) => {
   return (
     <>
       <div className="card" style={{ width: "18rem" }}>
@@ -8,9 +9,9 @@ const Card = ({ children, img, title, buttonText, buttonLink }) => {
         <div className="card-body">
           <h5 className="card-title">{title}</h5>
           <p className="card-text">{children}</p>
-          <a href={buttonLink} className="btn btn-primary">
-            {buttonText}
-          </a>
+          <ModalButton onClick={onClick} modalId="recipe-modal">
+            Show Recipe
+          </ModalButton>
         </div>
       </div>
     </>

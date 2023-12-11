@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavBar } from "./NavBar";
 import { Card } from "./card";
+import { Modal } from "./Modal";
 
 const Home = () => {
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedRecipe, setSelectedRecipe] = useState({});
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Async/await Syntax
   const searchSpoonacular = async (search) => {
@@ -45,6 +48,17 @@ const Home = () => {
     console.log(data);
   }
 
+  const getSingleRecipe = async (id) => {
+    setIsLoaded(false);
+    const url = `https://api.spoonacular.com/recipes/${id}/information`;
+    const apiKey = "150b3d1fc44d4503a4808decd9346790";
+
+    const resp = await fetch(`${url}?apiKey=${apiKey}`);
+    const data = await resp.json();
+    setSelectedRecipe(data);
+    setIsLoaded(true);
+  }
+
   return (
     <>
       <NavBar onSubmit={searchSpoonacular} />
@@ -53,8 +67,13 @@ const Home = () => {
           key={idx}
           title={recipe.title}
           img={recipe.image}
-          buttonText="View This Recipe"
+          onClick={() => getSingleRecipe(recipe.id)}
         ></Card>)}
+        <Modal
+          modalId="recipe-modal"
+          recipe={selectedRecipe}
+          isLoaded={isLoaded}
+        />
       </section>
     </>
   );
